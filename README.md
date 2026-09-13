@@ -23,7 +23,7 @@ Les deux fichiers sont séparés, mais ils sont **interdépendants** et doivent 
 
 `GamePanel.java` fournit le panneau de jeu ainsi que la boucle d'exécution nécessaire au fonctionnement du jeu.
 
-**Les deux fichiers doivent donc être présents pour que l'application fonctionne correctement.**
+**TRES IMPORTANT : Les deux fichiers doivent donc être présents pour que l'application fonctionne correctement.**
 
 ## Fonctionnement
 
@@ -52,3 +52,5 @@ Pour lancer le projet :
    ```
 3. Exécuter `Main.java`.
 4. La fenêtre du jeu devrait apparaître.
+
+
