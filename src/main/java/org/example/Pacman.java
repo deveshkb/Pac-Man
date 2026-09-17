@@ -2,6 +2,7 @@ package org.example;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.event.KeyListener;
 import javax.swing.ImageIcon;
 
 public class Pacman {
@@ -31,5 +32,9 @@ public class Pacman {
 
     public void draw(Graphics2D g2D){
         g2D.drawImage(image, x, y, IMAGE_SIZE, IMAGE_SIZE, null);
+    }
+
+    public KeyListener getKeyListener() {
+        return null;
     }
 }
