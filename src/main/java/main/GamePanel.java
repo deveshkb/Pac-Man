@@ -11,6 +11,7 @@ package main;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JPanel;
+import java.awt.Graphics;
 
 public class GamePanel extends JPanel implements Runnable{
     
@@ -26,6 +27,20 @@ public class GamePanel extends JPanel implements Runnable{
     
     Thread gameThread;
     
+    int[][] map = {
+    {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+    {1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1},
+    {1,2,1,1,1,2,1,1,1,1,2,1,1,1,2,1},
+    {1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1},
+    {1,2,1,1,2,1,1,2,2,1,1,2,1,1,2,1},
+    {1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1},
+    {1,2,1,1,1,2,1,1,1,1,2,1,1,1,2,1},
+    {1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1},
+    {1,2,1,1,2,1,1,2,2,1,1,2,1,1,2,1},
+    {1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1},
+    {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+};
+    
     
     public GamePanel(){
      
@@ -35,21 +50,65 @@ public class GamePanel extends JPanel implements Runnable{
         
     }
 
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        for(int row = 0; row < map.length; row++) {
+
+            for(int col = 0; col < map[row].length; col++) {
+
+                int x = col * tileSize;
+                int y = row * tileSize;
+
+                // Mur
+                if(map[row][col] == 1) {
+
+                    g.setColor(Color.BLUE);
+                    g.fillRect(x, y, tileSize, tileSize);
+                }
+
+                // Pastille
+                if(map[row][col] == 2) {
+
+                    g.setColor(Color.WHITE);
+
+                    int size = 8;
+
+                    g.fillOval(
+                        x + tileSize/2 - size/2,
+                        y + tileSize/2 - size/2,
+                        size,
+                        size
+                    );
+                }
+            }
+        }
+    }
+    
     public void startGameThread(){
     
-        gameThread = new Thread();
+        gameThread = new Thread(this);
         gameThread.start();
     }
     
+    
+    
     @Override
     public void run() {
-        
-            while(gameThread != null) {
-                
-                System.out.println("Test");
-                
+
+       while(gameThread != null) {
+           
+           //System.out.println("Test");
+
+            repaint();
+
+            try {
+                Thread.sleep(16);
             }
-        
+            catch(Exception e) {
+                e.printStackTrace();
+            }
         }
-   
     }
+}
