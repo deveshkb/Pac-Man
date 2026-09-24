@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -27,6 +28,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     Thread gameThread;
 
+    Ghost ghost = new Ghost();//on déclare le fantôme ici, comme
+    // n'importe quel autre champ de la classe
     // Couleurs
     private final Color ROYAL_BLUE = new Color(65, 105, 225);
     private final Color GHOST_DOOR_WHITE = Color.WHITE;
@@ -130,6 +133,9 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void update() {
         // TODO: logique du jeu
+
+        ghost.update(mazeLines, tileSize);//remplace le "// TODO" par cet appel.
+        // C'est ce qui fait bouger le fantôme à chaque frame
     }
 
     @Override
@@ -155,5 +161,9 @@ public class GamePanel extends JPanel implements Runnable {
         g2.setStroke(new BasicStroke(4));
         g2.drawLine(ghostDoor[0] * tileSize, ghostDoor[1] * tileSize,
                     ghostDoor[2] * tileSize, ghostDoor[3] * tileSize);
+
+    ghost.draw(g2);// tout à la fin de paintComponent(),
+        // après avoir dessiné le labyrinthe et la porte
+        // C'est ce qui fait apparaître le fantôme à l'écran
     }
 }

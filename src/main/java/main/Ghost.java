@@ -10,7 +10,7 @@ public class Ghost {
     // Taille du fantôme (24 pour passer dans un couloir d'une tuile de 32px)
     private final int SIZE = 24;
 
-    // Position en pixels (coin haut-gauche)
+    // Position en pixel horizontal et vertical
     private int x = 450;
     private int y = 300;
 
@@ -53,8 +53,8 @@ public class Ghost {
         }
     }
 
-    // Tire au hasard une direction libre (10 essais max).
-    // Si rien n'est libre (cul-de-sac), on garde la direction actuelle.
+    // Tire au hasard une direction libre (10 essais max)
+    // Si rien n'est libre on garde la direction actuelle
     private int pickFreeDirection(int[][] mazeLines, int tileSize) {
         for (int i = 0; i < 10; i++) {
             int candidate = random.nextInt(4);
@@ -75,7 +75,7 @@ public class Ghost {
         return direction;
     }
 
-    // Renvoie true si le fantôme placé en (px, py) touche un mur
+    // Renvoie true si le fantôme place en (px, py) touche un mur
     private boolean isColliding(int px, int py, int[][] mazeLines, int tileSize) {
         Rectangle ghostBox = new Rectangle(px, py, SIZE, SIZE);
 
