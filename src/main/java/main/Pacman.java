@@ -273,11 +273,36 @@ public class Pacman {
         map[row][col] = 0;
         score++;
     }
-}
-    
+    }
+
     public void draw(Graphics2D g2D) {
 
-        g2D.drawImage(
+        // Convertit la direction de déplacement en angle de rotation.
+        // L'angle est en radians, comme attendu par Graphics2D.rotate().
+        double rotation = switch (direction) {
+            // Gauche : le sprite orienté à droite fait un demi-tour.
+            case 1 -> Math.PI;
+            // Bas : rotation dans le sens des aiguilles d'une montre.
+            case 2 -> Math.PI / 2;
+            // Haut : rotation dans le sens inverse des aiguilles d'une montre.
+            case 3 -> -Math.PI / 2;
+            // Droite (direction 0) : le sprite a déjà la bonne orientation.
+            default -> 0;
+        };
+
+        // Crée un contexte indépendant : sa rotation ne touchera pas g2D.
+        Graphics2D rotatedGraphics = (Graphics2D) g2D.create();
+
+        // Applique la rotation autour du centre du sprite, pas autour du coin
+        // supérieur gauche. Pac-Man reste ainsi exactement à sa position.
+        rotatedGraphics.rotate(
+            rotation,
+            x + IMAGE_SIZE / 2.0,
+            y + IMAGE_SIZE / 2.0
+        );
+
+        // Dessine l'image après rotation, à la taille prévue pour Pac-Man.
+        rotatedGraphics.drawImage(
             image,
             x,
             y,
@@ -285,5 +310,8 @@ public class Pacman {
             IMAGE_SIZE,
             null
         );
+
+        // Libère la copie du contexte graphique créée avec create().
+        rotatedGraphics.dispose();
     }
 }
