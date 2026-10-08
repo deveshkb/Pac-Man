@@ -1,22 +1,12 @@
 package main;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements Runnable {
-    private int score = 0;
-    public void incrementScore(){
-        score++;
-        repaint();
-    }
 
     final int originalTileSize = 16;
     final int scale = 3;
@@ -59,7 +49,7 @@ public class GamePanel extends JPanel implements Runnable {
         setBackground(Color.BLACK);
         setDoubleBuffered(true);
 
-        pacman = new Pacman(this);
+        pacman = new Pacman();
         ghost = new ghost();
     }
 
@@ -107,15 +97,6 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         ghost.draw(g2D);
-        if(pacmanCaught){
-            g2D.setColor(Color.RED);
-            g2D.setFont(new Font("Arial", Font.BOLD, 40));
-            g2D.drawString("GAME OVER", 150, 180);
-        }
-        
-        g2D.setColor(Color.WHITE);
-        g2D.setFont(new Font("Arial", Font.BOLD, 20));
-        g2D.drawString("Score: " + score, 10, 25);
         
     }
 
