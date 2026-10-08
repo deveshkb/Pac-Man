@@ -21,15 +21,15 @@ public class Pacman {
 
     public static final int IMAGE_SIZE = 40;
 
-    // Marge entre le sprite (40 px) et la case (48 px) : 4 px de chaque côté.
+    //Marge entre le sprite (40 px) et la case (48 px) : 4 px de chaque côté.
     private static final int OFFSET = 4;
 
-    // Si le fantôme est à moins de ce nombre de cases (par le chemin),
-    // Pac-Man se met à fuir.
+    //Si le fantôme est à moins de ce nombre de cases (par le chemin),
+    //Pac-Man se met à fuir.
     private static final int FLEE_DISTANCE = 6;
 
-    // La mémoire est volontairement courte : elle évite les boucles sans
-    // interdire à Pac-Man de revenir plus tard dans un couloir nécessaire.
+    //La mémoire est volontairement courte : elle évite les boucles sans
+    //interdire à Pac-Man de revenir plus tard dans un couloir nécessaire.
     private static final int RECENT_TILE_LIMIT = 12;
 
     private static final int RIGHT = 0;
@@ -37,9 +37,9 @@ public class Pacman {
     private static final int DOWN = 2;
     private static final int UP = 3;
 
-    // Ces vecteurs associent chaque direction à son déplacement sur la grille.
-    // Les centraliser évite que le mouvement et la recherche de chemin ne se
-    // contredisent lorsqu'ils interprètent une direction.
+    //Ces vecteurs associent chaque direction à son déplacement sur la grille.
+    //Les centraliser évite que le mouvement et la recherche de chemin ne se
+    //contredisent lorsqu'ils interprètent une direction.
     private static final int[] COLUMN_MOVES = { 1, -1, 0, 0 };
     private static final int[] ROW_MOVES = { 0, 0, 1, -1 };
 
@@ -91,12 +91,12 @@ public class Pacman {
             int col = (x - OFFSET) / tileSize;
             int row = (y - OFFSET) / tileSize;
 
-            // On mémorise une case seulement lors de son entrée. Mémoriser
-            // chaque pixel fausserait la mémoire en faveur de la case courante.
+            //On mémorise une case seulement lors de son entrée. Mémoriser
+            //chaque pixel fausserait la mémoire en faveur de la case courante.
             rememberTile(col, row, map[0].length);
 
-            // La survie est prioritaire sur la collecte : une pastille ne sert
-            // à rien si Pac-Man choisit un chemin qui mène au fantôme.
+            //La survie est prioritaire sur la collecte : une pastille ne sert
+            //à rien si Pac-Man choisit un chemin qui mène au fantôme.
             if (!flee(map, tileSize, ghost)) {
                 chooseDirection(map, tileSize);
             }
@@ -161,8 +161,8 @@ public class Pacman {
             return false;
         }
 
-        // On compare les sorties possibles depuis la case courante. Le BFS
-        // donne leur vraie distance de fuite en tenant compte des murs.
+        //On compare les sorties possibles depuis la case courante. Le BFS
+        //donne leur vraie distance de fuite en tenant compte des murs.
         List<Integer> best = new ArrayList<>();
         int bestDistance = -1;
 
@@ -236,8 +236,8 @@ public class Pacman {
                     continue;
                 }
 
-                // Une case est ajoutée une seule fois. La première distance
-                // trouvée est donc forcément la plus courte.
+                //Une case est ajoutée une seule fois. La première distance
+                //trouvée est donc forcément la plus courte.
                 dist[r][c] = dist[cell[1]][cell[0]] + 1;
                 queue.add(new int[] { c, r });
             }
@@ -260,8 +260,8 @@ public class Pacman {
         int[] target = closestPellet(col, row, map);
 
         if (target != null) {
-            // On part de la pastille pour connaître, pour chaque sortie de
-            // Pac-Man, le nombre exact de cases restant jusqu'à l'objectif.
+            //On part de la pastille pour connaître, pour chaque sortie de
+            //Pac-Man, le nombre exact de cases restant jusqu'à l'objectif.
             int[][] targetDistances = distancesFrom(target[0], target[1], map);
             direction = directionTowardsTarget(
                 col,
@@ -270,8 +270,8 @@ public class Pacman {
                 map
             );
         } else {
-            // Cette solution garde un comportement valable si le niveau n'a
-            // plus de pastille, au lieu de laisser Pac-Man bloqué sans choix.
+            //Cette solution garde un comportement valable si le niveau n'a
+            //plus de pastille, au lieu de laisser Pac-Man bloqué sans choix.
             direction = explorationDirection(col, row, map);
         }
     }
@@ -309,8 +309,8 @@ public class Pacman {
             }
         }
 
-        // À distance égale, un choix aléatoire évite qu'un ordre fixe de
-        // lecture de la carte donne toujours le même parcours.
+        //À distance égale, un choix aléatoire évite qu'un ordre fixe de
+        //lecture de la carte donne toujours le même parcours.
         return closest.isEmpty()
             ? null
             : closest.get(random.nextInt(closest.size()));
@@ -343,8 +343,8 @@ public class Pacman {
             int distance = targetDistances[nextRow][nextCol];
             int visits = recentVisitCount(nextCol, nextRow, map[0].length);
 
-            // Une distance plus faible est toujours prioritaire : c'est ce qui
-            // garantit que Pac-Man suit réellement un plus court chemin.
+            //Une distance plus faible est toujours prioritaire : c'est ce qui
+            //garantit que Pac-Man suit réellement un plus court chemin.
             if (distance < bestDistance ||
                 (distance == bestDistance && visits < fewestRecentVisits)) {
 
@@ -410,9 +410,9 @@ public class Pacman {
             }
         }
 
-        // Un demi-tour reste disponible : le plus court chemin vers une
-        // pastille peut précisément commencer par revenir sur ses pas.
-        // La mémoire courte le rend moins probable en exploration seule.
+        //Un demi-tour reste disponible : le plus court chemin vers une
+        //pastille peut précisément commencer par revenir sur ses pas.
+        //La mémoire courte le rend moins probable en exploration seule.
         return choices;
     }
 
@@ -497,13 +497,13 @@ public class Pacman {
      */
     private void eatPellet(int[][] map, int tileSize) {
 
-        // Le centre est utilisé plutôt que le coin du sprite pour éviter de
-        // manger une pastille de la case voisine pendant une transition.
+        //Le centre est utilisé plutôt que le coin du sprite pour éviter de
+        //manger une pastille de la case voisine pendant une transition.
         int col = (x + IMAGE_SIZE / 2) / tileSize;
         int row = (y + IMAGE_SIZE / 2) / tileSize;
 
-        // La vérification évite un accès hors de la carte si le niveau ou la
-        // position de départ est modifié plus tard.
+        //La vérification évite un accès hors de la carte si le niveau ou la
+        //position de départ est modifié plus tard.
         if (row < 0 || row >= map.length ||
             col < 0 || col >= map[0].length) {
             return;
@@ -514,8 +514,8 @@ public class Pacman {
             gamePanel.incrementScore();
         }
 
-        // Passer la case à 0 garantit que la même pastille ne peut compter
-        // qu'une fois, même si plusieurs images sont dessinées sur la case.
+        //Passer la case à 0 garantit que la même pastille ne peut compter
+        //qu'une fois, même si plusieurs images sont dessinées sur la case.
         if (map[row][col] == 2) {
             map[row][col] = 0;
             score++;
@@ -529,31 +529,31 @@ public class Pacman {
      */
     public void draw(Graphics2D g2D) {
 
-        // Convertit la direction de déplacement en angle de rotation.
-        // L'angle est en radians, comme attendu par Graphics2D.rotate().
+        //Convertit la direction de déplacement en angle de rotation.
+        //L'angle est en radians, comme attendu par Graphics2D.rotate().
         double rotation = switch (direction) {
-            // Gauche : le sprite orienté à droite fait un demi-tour. 180 Deg
+            //Gauche : le sprite orienté à droite fait un demi-tour. 180 Deg
             case LEFT -> Math.PI;
-            // Bas : rotation dans le sens des aiguilles d'une montre.
+            //Bas : rotation dans le sens des aiguilles d'une montre.
             case DOWN -> Math.PI / 2;
-            // Haut : rotation dans le sens inverse des aiguilles d'une montre.
+            //Haut : rotation dans le sens inverse des aiguilles d'une montre.
             case UP -> -Math.PI / 2;
-            // Droite (direction 0) : le sprite a déjà la bonne orientation.
+            //Droite (direction 0) : le sprite a déjà la bonne orientation.
             default -> 0;
         };
 
-        // Crée un contexte indépendant : sa rotation ne touchera pas g2D.
+        //Crée un contexte indépendant : sa rotation ne touchera pas g2D.
         Graphics2D rotatedGraphics = (Graphics2D) g2D.create();
 
-        // Applique la rotation autour du centre du sprite, pas autour du coin
-        // supérieur gauche. Pac-Man reste ainsi exactement à sa position.
+        //Applique la rotation autour du centre du sprite, pas autour du coin
+        //supérieur gauche. Pac-Man reste ainsi exactement à sa position.
         rotatedGraphics.rotate(
             rotation,
             x + IMAGE_SIZE / 2.0,
             y + IMAGE_SIZE / 2.0
         );
 
-        // Dessine l'image après rotation, à la taille prévue pour Pac-Man.
+        //Dessine l'image après rotation, à la taille prévue pour Pac-Man.
         rotatedGraphics.drawImage(
             image,
             x,
@@ -563,7 +563,7 @@ public class Pacman {
             null
         );
 
-        // Libère la copie du contexte graphique créée avec create().
+        //Libère la copie du contexte graphique créée avec create().
         rotatedGraphics.dispose();
     }
 }
