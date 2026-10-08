@@ -36,7 +36,7 @@ public class GamePanel extends JPanel implements Runnable {
     };
 
     Pacman pacman;
-    ghost ghost;
+    ghost[] ghosts = new ghost[4];
 
     boolean pacmanCaught = false;
 
@@ -50,7 +50,12 @@ public class GamePanel extends JPanel implements Runnable {
         setDoubleBuffered(true);
 
         pacman = new Pacman();
-        ghost = new ghost();
+
+        // Instanciation des 4 fantômes avec leurs images et des positions initiales adaptées à la carte
+        ghosts[0] = new ghost("game.png",  7 * tileSize + 4, 5 * tileSize + 4);
+        ghosts[1] = new ghost("game2.png", 8 * tileSize + 4, 5 * tileSize + 4);
+        ghosts[2] = new ghost("game3.png", 7 * tileSize + 4, 6 * tileSize + 4);
+        ghosts[3] = new ghost("game4.png", 8 * tileSize + 4, 6 * tileSize + 4);
     }
 
     @Override
@@ -96,7 +101,9 @@ public class GamePanel extends JPanel implements Runnable {
             pacman.draw(g2D);
         }
 
-        ghost.draw(g2D);
+        for (ghost gGhost : ghosts) {
+            gGhost.draw(g2D);
+        }
     }
 
     public void startGameThread() {
@@ -112,13 +119,16 @@ public class GamePanel extends JPanel implements Runnable {
 
             if (!pacmanCaught) {
 
-                pacman.update(map, tileSize, ghost);
+                // Mise à jour de Pacman (on lui passe le premier fantôme si sa méthode le demande)
+                pacman.update(map, tileSize, ghosts[0]);
 
-                ghost.update(
-                    map,
-                    tileSize,
-                    pacman
-                );
+                for (ghost gGhost : ghosts) {
+                    gGhost.update(
+                        map,
+                        tileSize,
+                        pacman
+                    );
+                }
 
                 checkCollision();
             }
@@ -145,20 +155,24 @@ public class GamePanel extends JPanel implements Runnable {
         int pacmanCenterY =
             pacman.y + Pacman.IMAGE_SIZE / 2;
 
-        int ghostCenterX =
-            ghost.p + ghost.IMAGE_SIZE / 2;
+        for (ghost gGhost : ghosts) {
 
-        int ghostCenterY =
-            ghost.o + ghost.IMAGE_SIZE / 2;
+            int ghostCenterX =
+                gGhost.p + ghost.IMAGE_SIZE / 2;
 
-        int dx = pacmanCenterX - ghostCenterX;
-        int dy = pacmanCenterY - ghostCenterY;
+            int ghostCenterY =
+                gGhost.o + ghost.IMAGE_SIZE / 2;
 
-        double distance =
-            Math.sqrt(dx * dx + dy * dy);
+            int dx = pacmanCenterX - ghostCenterX;
+            int dy = pacmanCenterY - ghostCenterY;
 
-        if (distance <= 24) {
-            pacmanCaught = true;
+            double distance =
+                Math.sqrt(dx * dx + dy * dy);
+
+            if (distance <= 24) {
+                pacmanCaught = true;
+                break;
+            }
         }
     }
 }
