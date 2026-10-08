@@ -28,6 +28,8 @@ public class Pacman {
     // Pac-Man se met à fuir.
     private static final int FLEE_DISTANCE = 6;
 
+    private GamePanel gamePanel;
+
     // La mémoire est volontairement courte : elle évite les boucles sans
     // interdire à Pac-Man de revenir plus tard dans un couloir nécessaire.
     private static final int RECENT_TILE_LIMIT = 12;
@@ -54,6 +56,10 @@ public class Pacman {
     int score = 0;
 
     Random random = new Random();
+
+    public Pacman(GamePanel gamePanel) {
+
+        this.gamePanel = gamePanel;
 
     private final ArrayDeque<Integer> recentTiles = new ArrayDeque<>();
 
@@ -510,7 +516,7 @@ public class Pacman {
         // qu'une fois, même si plusieurs images sont dessinées sur la case.
         if (map[row][col] == 2) {
             map[row][col] = 0;
-            score++;
+            gamePanel.incrementScore();
         }
     }
 
