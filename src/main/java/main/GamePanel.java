@@ -113,7 +113,7 @@ public class GamePanel extends JPanel implements Runnable {
         if(pacmanCaught){
             g2D.setColor(Color.RED);
             g2D.setFont(new Font("Arial", Font.BOLD, 40));
-            g2D.drawString("GAME OVER", 150, 180);
+            g2D.drawString("GAME OVER", 250, 300);
         }
 
         g2D.setColor(Color.WHITE);
