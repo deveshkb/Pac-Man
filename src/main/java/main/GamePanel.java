@@ -2,9 +2,12 @@ package main;
 
 import java.awt.*;
 import javax.swing.JPanel;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class GamePanel extends JPanel implements Runnable {
+public class GamePanel extends JPanel implements Runnable, KeyListener {
     private int score = 0;
+
     public void incrementScore(){
         score++;
         repaint();
@@ -56,11 +59,14 @@ public class GamePanel extends JPanel implements Runnable {
     public GamePanel() {
 
         setPreferredSize(
-            new Dimension(screenWidth, screenHeight)
+                new Dimension(screenWidth, screenHeight)
         );
 
         setBackground(Color.BLACK);
         setDoubleBuffered(true);
+
+        setFocusable(true);
+        addKeyListener(this);
 
         pacman = new Pacman(this);
         ghost = new ghost();
@@ -85,8 +91,8 @@ public class GamePanel extends JPanel implements Runnable {
                     g.setColor(Color.BLUE);
 
                     g.fillRect(
-                        x, y,
-                        tileSize, tileSize
+                            x, y,
+                            tileSize, tileSize
                     );
                 }
 
@@ -97,9 +103,9 @@ public class GamePanel extends JPanel implements Runnable {
                     int size = 8;
 
                     g.fillOval(
-                        x + tileSize / 2 - size / 2,
-                        y + tileSize / 2 - size / 2,
-                        size, size
+                            x + tileSize / 2 - size / 2,
+                            y + tileSize / 2 - size / 2,
+                            size, size
                     );
                 }
             }
@@ -110,6 +116,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         ghost.draw(g2D);
+
         if(pacmanCaught){
             g2D.setColor(Color.RED);
             g2D.setFont(new Font("Arial", Font.BOLD, 40));
@@ -119,13 +126,15 @@ public class GamePanel extends JPanel implements Runnable {
         g2D.setColor(Color.WHITE);
         g2D.setFont(new Font("Arial", Font.BOLD, 20));
         g2D.drawString("Score: " + score, 10, 25);
-        
+
+
     }
 
     public void startGameThread() {
 
         gameThread = new Thread(this);
         gameThread.start();
+        requestFocusInWindow();
     }
 
     @Override
@@ -138,9 +147,9 @@ public class GamePanel extends JPanel implements Runnable {
                 pacman.update(map, tileSize, ghost);
 
                 ghost.update(
-                    map,
-                    tileSize,
-                    pacman
+                        map,
+                        tileSize,
+                        pacman
                 );
 
                 checkCollision();
@@ -163,25 +172,53 @@ public class GamePanel extends JPanel implements Runnable {
     private void checkCollision() {
 
         int pacmanCenterX =
-            pacman.x + Pacman.IMAGE_SIZE / 2;
+                pacman.x + Pacman.IMAGE_SIZE / 2;
 
         int pacmanCenterY =
-            pacman.y + Pacman.IMAGE_SIZE / 2;
+                pacman.y + Pacman.IMAGE_SIZE / 2;
 
         int ghostCenterX =
-            ghost.p + ghost.IMAGE_SIZE / 2;
+                ghost.p + ghost.IMAGE_SIZE / 2;
 
         int ghostCenterY =
-            ghost.o + ghost.IMAGE_SIZE / 2;
+                ghost.o + ghost.IMAGE_SIZE / 2;
 
         int dx = pacmanCenterX - ghostCenterX;
         int dy = pacmanCenterY - ghostCenterY;
 
         double distance =
-            Math.sqrt(dx * dx + dy * dy);
+                Math.sqrt(dx * dx + dy * dy);
 
         if (distance <= 24) {
             pacmanCaught = true;
         }
+    }
+
+    public void restartGame() {
+
+        pacmanCaught = false;
+        score = 0;
+
+        pacman = new Pacman(this);
+        ghost = new ghost();
+
+        requestFocusInWindow();
+        repaint();
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+        if (e.getKeyCode() == KeyEvent.VK_R && pacmanCaught) {
+            restartGame();
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
     }
 }
