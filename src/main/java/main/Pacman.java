@@ -43,6 +43,8 @@ public class Pacman {
     private static final int[] COLUMN_MOVES = { 1, -1, 0, 0 };
     private static final int[] ROW_MOVES = { 0, 0, 1, -1 };
 
+    private GamePanel gamePanel;
+
     Image image;
 
     int x;
@@ -60,13 +62,14 @@ public class Pacman {
     /**
      * Charge le sprite de Pac-Man et le place au départ sur une case libre.
      */
-    public Pacman() {
+    public Pacman(GamePanel gamePanel) {
+
+        this.gamePanel = gamePanel;
 
         image = new ImageIcon(
-            getClass().getResource("/pacman.png")
+                getClass().getResource("/pacman.png")
         ).getImage();
 
-        // Départ dans un couloir libre, aligné sur une case.
         x = 48 + OFFSET;
         y = 48 + OFFSET;
     }
@@ -504,6 +507,11 @@ public class Pacman {
         if (row < 0 || row >= map.length ||
             col < 0 || col >= map[0].length) {
             return;
+        }
+
+        if (map[row][col] == 2) {
+            map[row][col] = 0;
+            gamePanel.incrementScore();
         }
 
         // Passer la case à 0 garantit que la même pastille ne peut compter
