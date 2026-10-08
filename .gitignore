@@ -1,1 +1,25 @@
-/target/
+# Maven build output
+target/
+
+# Compiled Java files
+*.class
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# NetBeans
+nbactions.xml
+nbproject/private/
+nbproject/build-impl.xml
+nbproject/dist/
+nbproject/nbactions.xml
+nbproject/private/
+
+# VS Code
+.vscode/
