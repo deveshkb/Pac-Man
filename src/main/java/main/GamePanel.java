@@ -27,27 +27,31 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
     int[][] map = {
             {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-
             {1,2,2,2,2,2,2,2,2,1,2,2,2,2,2,1},
-
             {1,2,1,1,1,1,1,2,1,1,2,1,1,1,2,1},
-
             {1,2,2,2,2,2,1,2,2,2,2,2,2,2,2,1},
-
             {1,2,1,1,2,2,2,2,1,1,1,2,1,1,2,1},
-
             {1,2,1,1,2,1,1,2,1,1,1,2,2,1,2,1},
-
             {1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1},
-
             {1,1,1,2,1,2,1,1,1,1,2,1,2,1,1,1},
-
             {1,2,2,2,1,2,2,1,2,2,2,1,2,2,2,1},
-
             {1,2,1,1,1,1,2,1,2,1,1,1,1,1,2,1},
-
             {1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1},
+            {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+    };
 
+    int[][] originalMap = {
+            {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+            {1,2,2,2,2,2,2,2,2,1,2,2,2,2,2,1},
+            {1,2,1,1,1,1,1,2,1,1,2,1,1,1,2,1},
+            {1,2,2,2,2,2,1,2,2,2,2,2,2,2,2,1},
+            {1,2,1,1,2,2,2,2,1,1,1,2,1,1,2,1},
+            {1,2,1,1,2,1,1,2,1,1,1,2,2,1,2,1},
+            {1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1},
+            {1,1,1,2,1,2,1,1,1,1,2,1,2,1,1,1},
+            {1,2,2,2,1,2,2,1,2,2,2,1,2,2,2,1},
+            {1,2,1,1,1,1,2,1,2,1,1,1,1,1,2,1},
+            {1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1},
             {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
     };
 
@@ -89,7 +93,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
                 if (map[row][col] == 1) {
 
                     g.setColor(Color.BLUE);
-
                     g.fillRect(
                             x, y,
                             tileSize, tileSize
@@ -99,7 +102,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
                 if (map[row][col] == 2) {
 
                     g.setColor(Color.WHITE);
-
                     int size = 8;
 
                     g.fillOval(
@@ -126,8 +128,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         g2D.setColor(Color.WHITE);
         g2D.setFont(new Font("Arial", Font.BOLD, 20));
         g2D.drawString("Score: " + score, 10, 25);
-
-
     }
 
     public void startGameThread() {
@@ -198,6 +198,12 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
         pacmanCaught = false;
         score = 0;
+
+        for (int row = 0; row < originalMap.length; row++) {
+            for (int col = 0; col < originalMap[row].length; col++) {
+                map[row][col] = originalMap[row][col];
+            }
+        }
 
         pacman = new Pacman(this);
         ghost = new ghost();
