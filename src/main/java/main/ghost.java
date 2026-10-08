@@ -16,7 +16,7 @@ public class ghost {
     int p;
     int o;
 
-    int speed = 5;
+    int speed = 4;
 
     // 0 = droite, 1 = gauche, 2 = bas, 3 = haut
     int direction = 1;
