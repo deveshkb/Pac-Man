@@ -21,6 +21,8 @@ public class Pacman {
     // Si le fantôme est à moins de ce nombre de cases (par le chemin),
     // Pac-Man se met à fuir.
     private static final int FLEE_DISTANCE = 6;
+    
+    private GamePanel gamePanel;
 
     Image image;
 
@@ -31,17 +33,17 @@ public class Pacman {
 
     // 0 = droite, 1 = gauche, 2 = bas, 3 = haut
     int direction = 0;
-    int score = 0;
 
     Random random = new Random();
 
-    public Pacman() {
+    public Pacman(GamePanel gamePanel) {
+
+        this.gamePanel = gamePanel;
 
         image = new ImageIcon(
             getClass().getResource("/pacman.png")
         ).getImage();
 
-        // Départ dans un couloir libre, aligné sur une case.
         x = 48 + OFFSET;
         y = 48 + OFFSET;
     }
@@ -258,22 +260,19 @@ public class Pacman {
 
     private void eatPellet(int[][] map, int tileSize) {
 
-    // Case (colonne, ligne) où se trouve le centre de Pac-Man
-    int col = (x + IMAGE_SIZE / 2) / tileSize;
-    int row = (y + IMAGE_SIZE / 2) / tileSize;
+        int col = (x + IMAGE_SIZE / 2) / tileSize;
+        int row = (y + IMAGE_SIZE / 2) / tileSize;
 
-    // Sécurité : on reste dans la carte
-    if (row < 0 || row >= map.length ||
-        col < 0 || col >= map[0].length) {
-        return;
-    }
+        if (row < 0 || row >= map.length ||
+            col < 0 || col >= map[0].length) {
+            return;
+        }
 
-    // Si la case contient une pastille (2), elle est mangée
-    if (map[row][col] == 2) {
-        map[row][col] = 0;
-        score++;
+        if (map[row][col] == 2) {
+            map[row][col] = 0;
+            gamePanel.incrementScore();
+        }
     }
-}
     
     public void draw(Graphics2D g2D) {
 
