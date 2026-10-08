@@ -23,14 +23,22 @@ public class ghost {
 
     Random random = new Random();
 
+    // Constructeur par défaut (compatibilité)
     public ghost() {
+        this("game.png", 14 * 48 + 4, 10 * 48 + 4);
+    }
 
-        image = new ImageIcon(
-            getClass().getResource("/game.png")
-        ).getImage();
+    // Constructeur personnalisé
+    public ghost(String imageName, int startX, int startY) {
+        java.net.URL imgURL = getClass().getResource("/" + imageName);
+        if (imgURL != null) {
+            this.image = new ImageIcon(imgURL).getImage();
+        } else {
+            System.err.println("Erreur : Image introuvable -> /" + imageName);
+        }
 
-        p = 14 * 48 + 4;
-        o = 10 * 48 + 4;
+        this.p = startX;
+        this.o = startY;
     }
 
     public void update(
@@ -256,9 +264,20 @@ public class ghost {
 
     public void draw(Graphics2D g2D) {
 
-        g2D.drawImage(
-            image, p, o,
-            IMAGE_SIZE, IMAGE_SIZE, null
-        );
+        if (image != null) {
+            g2D.drawImage(
+                image, p, o,
+                IMAGE_SIZE, IMAGE_SIZE, null
+            );
+        }
+    }
+
+    // Getters pour gérer les collisions avec Pac-Man
+    public int getX() {
+        return p;
+    }
+
+    public int getY() {
+        return o;
     }
 }
