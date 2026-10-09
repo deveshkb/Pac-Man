@@ -18,19 +18,27 @@ public class ghost {
 
     int speed = 5;
 
-    //0 = droite, 1 = gauche, 2 = bas, 3 = haut
+    // 0 = droite, 1 = gauche, 2 = bas, 3 = haut
     int direction = 1;
 
     Random random = new Random();
 
+    // Constructeur par défaut (compatibilité)
     public ghost() {
+        this("game.png", 14 * 48 + 4, 10 * 48 + 4);
+    }
 
-        image = new ImageIcon(
-            getClass().getResource("/game.png")
-        ).getImage();
+    // Constructeur personnalisé
+    public ghost(String imageName, int startX, int startY) {
+        java.net.URL imgURL = getClass().getResource("/" + imageName);
+        if (imgURL != null) {
+            this.image = new ImageIcon(imgURL).getImage();
+        } else {
+            System.err.println("Erreur : Image introuvable -> /" + imageName);
+        }
 
-        p = 14 * 48 + 4;
-        o = 10 * 48 + 4;
+        this.p = startX;
+        this.o = startY;
     }
 
     public void update(
@@ -39,8 +47,8 @@ public class ghost {
         Pacman pacman
     ) {
 
-        //Comme Pac-Man, le fantôme garde sa direction
-        //jusqu'à la fin du couloir.
+        // Comme Pac-Man, le fantôme garde sa direction
+        // jusqu'à la fin du couloir.
         if (isAtCenter(tileSize)) {
 
             chooseDirection(map, tileSize, pacman);
@@ -84,8 +92,8 @@ public class ghost {
         int right = turnRight(direction);
         int opposite = oppositeDirection(direction);
 
-        //On ne change de couloir que si le nouveau couloir
-        //ne nécessite pas de faire demi-tour.
+        // On ne change de couloir que si le nouveau couloir
+        // ne nécessite pas de faire demi-tour.
         if (validDirections.contains(direction)) {
             choices.add(direction);
         }
@@ -98,8 +106,8 @@ public class ghost {
             choices.add(right);
         }
 
-        //Calcule quelle direction rapproche le plus
-        //du Pac-Man parmi les directions possibles.
+        // Calcule quelle direction rapproche le plus
+        // du Pac-Man parmi les directions possibles.
         int bestDirection = direction;
         int bestDistance = Integer.MAX_VALUE;
 
@@ -123,7 +131,7 @@ public class ghost {
             }
         }
 
-        //Petite part d'aléatoire aux intersections.
+        // Petite part d'aléatoire aux intersections.
         if (choices.size() > 1 &&
             random.nextInt(100) < 15) {
 
@@ -133,7 +141,7 @@ public class ghost {
                 );
         }
 
-        //Demi-tour seulement si c'est un cul-de-sac.
+        // Demi-tour seulement si c'est un cul-de-sac.
         if (!validDirections.contains(direction) &&
             choices.isEmpty() &&
             validDirections.contains(opposite)) {
@@ -256,9 +264,20 @@ public class ghost {
 
     public void draw(Graphics2D g2D) {
 
-        g2D.drawImage(
-            image, p, o,
-            IMAGE_SIZE, IMAGE_SIZE, null
-        );
+        if (image != null) {
+            g2D.drawImage(
+                image, p, o,
+                IMAGE_SIZE, IMAGE_SIZE, null
+            );
+        }
+    }
+
+    // Getters pour gérer les collisions avec Pac-Man
+    public int getX() {
+        return p;
+    }
+
+    public int getY() {
+        return o;
     }
 }
